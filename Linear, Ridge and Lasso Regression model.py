@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[18]:
+# In[41]:
 
 
 import numpy as np
@@ -43,7 +43,7 @@ print("Heat Map1")
 plt.show()
 
 
-# In[19]:
+# In[42]:
 
 
 import seaborn as sns
@@ -53,7 +53,7 @@ sns.pairplot(df[cols], size=2.5)
 plt.show()
 
 
-# In[20]:
+# In[43]:
 
 
 import numpy as np
@@ -63,7 +63,7 @@ heatmap = sns.heatmap(corr, cbar=True, annot=True, square=True, fmt='.2f', annot
 plt.show()
 
 
-# In[29]:
+# In[44]:
 
 
 from sklearn.model_selection import train_test_split
@@ -94,7 +94,7 @@ from sklearn.metrics import r2_score
 print('R^2 train: %.3f, test: %.3f' % (r2_score(y_train, y_train_pred), r2_score(y_test, y_test_pred)))
 
 
-# In[40]:
+# In[56]:
 
 
 from sklearn.linear_model import Ridge
@@ -113,23 +113,66 @@ plt.xlabel("Alpha")
 plt.ylabel("CV Score")
 plt.show()
 ridge.fit(X_train,y_train)
+
 ridge_coef = ridge.coef_
+y_train_pred = ridge.predict(X_train)
+y_test_pred = ridge.predict(X_test)
+plt.scatter(y_train_pred, y_train_pred - y_train, c='blue', marker='o', label='Training data')
+plt.scatter(y_test_pred, y_test_pred - y_test, c='lightgreen', marker='s', label='Test data')
+plt.xlabel('Predicted values')
+plt.ylabel('Residuals')
+plt.legend(loc='upper left')
+plt.hlines(y=0, xmin=-10, xmax=50, lw=2, color='red')
+plt.xlim([-10, 50])
+plt.show()
+print('Slope: %.3f' % ridge.coef_[0])
+print('Intercept: %.3f' % ridge.intercept_)
+print('MSE train: %.3f, test: %.3f' % (mean_squared_error(y_train, y_train_pred), mean_squared_error(y_test, y_test_pred)))
+print('R^2 train: %.3f, test: %.3f' % (r2_score(y_train, y_train_pred), r2_score(y_test, y_test_pred)))
 print("Ridge Regression Model Coefficients= " + str(ridge_coef))
 print("Ridge Regression Model Accuracy= " + str(ridge.score(X_test, y_test)))
 
 from sklearn.linear_model import Lasso
-lasso = Lasso(alpha=1.0) 
+lasso = Lasso(alpha=0.1) 
 lasso_cv_scores = cross_val_score(lasso,X,y,cv=5)
-print("Lasso Cross Validation scores= "+str(np.mean(lasso_cv_scores)))
+print("Lasso Cross Validation Accuracy= "+str(np.mean(lasso_cv_scores)))
 lasso.fit(X_train,y_train)
 lasso_coef = lasso.coef_
+y_train_pred = lasso.predict(X_train)
+y_test_pred = lasso.predict(X_test)
+plt.scatter(y_train_pred, y_train_pred - y_train, c='blue', marker='o', label='Training data')
+plt.scatter(y_test_pred, y_test_pred - y_test, c='lightgreen', marker='s', label='Test data')
+plt.xlabel('Predicted values')
+plt.ylabel('Residuals')
+plt.legend(loc='upper left')
+plt.hlines(y=0, xmin=-10, xmax=50, lw=2, color='red')
+plt.xlim([-10, 50])
+plt.show()
+print('Slope: %.3f' % lasso.coef_[0])
+print('Intercept: %.3f' % lasso.intercept_)
+print('MSE train: %.3f, test: %.3f' % (mean_squared_error(y_train, y_train_pred), mean_squared_error(y_test, y_test_pred)))
+print('R^2 train: %.3f, test: %.3f' % (r2_score(y_train, y_train_pred), r2_score(y_test, y_test_pred)))
 print("Lasso Regression Model Coefficients= " +str(lasso_coef))
 print("Lasso Regression Model Accuracy= " + str(lasso.score(X_test, y_test)))
 
 from sklearn.linear_model import ElasticNet
-lasso = ElasticNet(alpha=1.0, l1_ratio=0.5)
+lasso = ElasticNet(alpha=0.1, l1_ratio=0.5)
 lasso.fit(X_train,y_train)
 lasso_coef = lasso.coef_
+y_train_pred = lasso.predict(X_train)
+y_test_pred = lasso.predict(X_test)
+plt.scatter(y_train_pred, y_train_pred - y_train, c='blue', marker='o', label='Training data')
+plt.scatter(y_test_pred, y_test_pred - y_test, c='lightgreen', marker='s', label='Test data')
+plt.xlabel('Predicted values')
+plt.ylabel('Residuals')
+plt.legend(loc='upper left')
+plt.hlines(y=0, xmin=-10, xmax=50, lw=2, color='red')
+plt.xlim([-10, 50])
+plt.show()
+print('Slope: %.3f' % lasso.coef_[0])
+print('Intercept: %.3f' % lasso.intercept_)
+print('MSE train: %.3f, test: %.3f' % (mean_squared_error(y_train, y_train_pred), mean_squared_error(y_test, y_test_pred)))
+print('R^2 train: %.3f, test: %.3f' % (r2_score(y_train, y_train_pred), r2_score(y_test, y_test_pred)))
 print("ElasticNet Lasso Regression Model Coefficients= " +str(lasso_coef))
 print("ElasticNet Lasso Regression Model Accuracy= " + str(lasso.score(X_test, y_test)))
 
